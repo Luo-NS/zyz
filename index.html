@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>液态玻璃资源站</title>
+<link rel="icon" href="./favicon.png" type="image/png">
+<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft Yahei", system-ui, -apple-system, sans-serif;
+}
+
+:root{
+    --bg-gradient-1: #ffeaf2;
+    --bg-gradient-2: #fce4ee;
+    --bg-gradient-3: #f8dce8;
+    --bg-gradient-4: #fbe5ee;
+    --bg-single: #ffeaf2;
+    --use-single: 0;
+
+    --glass-bg: rgba(255, 255, 255, 0.28);
+    --glass-border: rgba(255, 255, 255, 0.42);
+    --glass-inner-light: rgba(255,255,255,0.45);
+
+    --text-color: #664452;
+    --text-title: #805468;
+    --hover-color: #d478a2;
+    --shadow-color: rgba(160,100,120,0.10);
+
+    --linkitem-bg: rgba(255,255,255,0.25);
+    --linkitem-hover-bg: rgba(255,255,255,0.38);
+
+    --modal-backdrop: rgba(255,255,255,0.02);
+    --modal-bg-light: rgba(255, 255, 255, 0.65);
+    --modal-bg-dark: rgba(28, 30, 38, 0.68);
+    --modal-border-light: rgba(255, 255, 255, 0.56);
+    --modal-border-dark: rgba(255, 255, 255, 0.14);
+}
+
+body.liquid-glass-off{
+    --glass-bg: rgba(255,255,255,0.48);
+    --glass-border: rgba(255,255,255,0.20);
+    --glass-inner-light: rgba(255,255,255,0.10);
+    --linkitem-bg: rgba(255,255,255,0.42);
+    --linkitem-hover-bg: rgba(255,255,255,0.55);
+}
+
+body.liquid-glass-off .liquid-glass,
+body.liquid-glass-off .theme-btn,
+body.liquid-glass-off .custom-theme-panel,
+body.liquid-glass-off .single-btn,
+body.liquid-glass-off .substation-item,
+body.liquid-glass-off .link-item,
+body.liquid-glass-off .footer-bar,
+body.liquid-glass-off .about-btn{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.blue-theme{
+    --bg-gradient-1: #e8f2ff;
+    --bg-gradient-2: #ddecfb;
+    --bg-gradient-3: #d1e4f8;
+    --bg-gradient-4: #e4effc;
+    --bg-single: #e8f2ff;
+    --use-single: 0;
+
+    --glass-bg: rgba(255, 255, 255, 0.28);
+    --glass-border: rgba(255, 255, 255, 0.42);
+    --glass-inner-light: rgba(255,255,255,0.45);
+
+    --text-color: #344960;
+    --text-title: #3c5777;
+    --hover-color: #4286c9;
+    --shadow-color: rgba(80,120,170,0.10);
+
+    --linkitem-bg: rgba(255,255,255,0.25);
+    --linkitem-hover-bg: rgba(255,255,255,0.38);
+}
+body.blue-theme.liquid-glass-off{
+    --glass-bg: rgba(255,255,255,0.48);
+    --glass-border: rgba(255,255,255,0.20);
+    --linkitem-bg: rgba(255,255,255,0.42);
+    --linkitem-hover-bg: rgba(255,255,255,0.55);
+}
+
+body.dark{
+    --bg-gradient-1: #14161b;
+    --bg-gradient-2: #1a1d24;
+    --bg-gradient-3: #22252d;
+    --bg-gradient-4: #17191f;
+    --bg-single: #14161b;
+    --use-single: 0;
+
+    --glass-bg: rgba(30,34,44,0.50);
+    --glass-border: rgba(255,255,255,0.12);
+    --glass-inner-light: rgba(255,255,255,0.08);
+
+    --text-color: #d4d8e0;
+    --text-title: #e2e6ee;
+    --hover-color: #ffc888;
+    --shadow-color: rgba(0,0,0,0.25);
+
+    --linkitem-bg: rgba(255,255,255,0.10);
+    --linkitem-hover-bg: rgba(255,255,255,0.18);
+}
+body.dark.liquid-glass-off{
+    --glass-bg: rgba(22,26,34,0.60);
+    --glass-border: rgba(255,255,255,0.10);
+    --linkitem-bg: rgba(255,255,255,0.12);
+    --linkitem-hover-bg: rgba(255,255,255,0.20);
+}
+
+body.custom-theme{
+    --glass-bg: rgba(255,255,255,0.28);
+    --glass-border: rgba(255, 255, 255, 0.42);
+    --glass-inner-light: rgba(255,255,255,0.45);
+    --linkitem-bg: rgba(255,255,255,0.25);
+    --linkitem-hover-bg: rgba(255,255,255,0.38);
+}
+body.custom-theme.liquid-glass-off{
+    --glass-bg: rgba(255,255,255,0.46);
+    --glass-border: rgba(255,255,255,0.18);
+    --linkitem-bg: rgba(255,255,255,0.40);
+    --linkitem-hover-bg: rgba(255,255,255,0.52);
+}
+
+body.custom-theme.text-dark{
+    --text-color:#111111;
+    --text-title:#222222;
+    --hover-color:#333333;
+}
+body.custom-theme.text-light{
+    --text-color:#eeeeee;
+    --text-title:#ffffff;
+    --hover-color:#dddddd;
+}
+
+html,body{
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body{
+    position: relative;
+    color: var(--text-color);
+    padding-bottom: 70px;
+    transition: color 0.3s ease, background 0.3s ease;
+}
+
+body::before{
+    content:"";
+    position: fixed;
+    inset:0;
+    z-index:-1;
+    background: linear-gradient(145deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 35%, var(--bg-gradient-3) 70%, var(--bg-gradient-4) 100%);
+    background-color: var(--bg-single);
+    transition: background 0.3s ease;
+}
+
+body[use-single="1"]::before{
+    background: var(--bg-single);
+}
+
+.liquid-glass{
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px var(--shadow-color), inset 0 1px 0 var(--glass-inner-light);
+    border-radius: 22px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.top-btn-wrap{
+    position: fixed;
+    top:12px;
+    right:12px;
+    z-index: 999;
+    display:flex;
+    gap:6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100% - 24px);
+}
+
+.theme-btn{
+    padding:6px 10px;
+    font-size:13px;
+    background:rgba(255,255,255,0.22);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border:1px solid var(--glass-border);
+    border-radius:12px;
+    color:var(--text-color);
+    cursor:pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.theme-btn:hover{
+    background:rgba(255,255,255,0.38);
+}
+
+.custom-theme-panel{
+    position: fixed;
+    top:52px;
+    right:12px;
+    z-index:998;
+    padding:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.24);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border:1px solid var(--glass-border);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    max-width:260px;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.custom-theme-panel.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.custom-section-title{
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-color);
+    margin-bottom:2px;
+}
+
+.color-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.color-input-item{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    font-size:12px;
+    color:var(--text-color);
+}
+
+.color-input-item input[type="color"]{
+    width:28px;
+    height:28px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    background:transparent;
+}
+
+.single-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.single-btn{
+    padding:5px 8px;
+    font-size:12px;
+    border-radius:10px;
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.24);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    color:var(--text-color);
+    cursor:pointer;
+    transition: all 0.25s ease;
+}
+
+.single-btn:hover{
+    background:rgba(255,255,255,0.40);
+}
+
+.container{
+    width: 100%;
+    max-width: 1200px;
+    margin:0 auto;
+    padding:64px 12px 20px;
+}
+
+.page-title{
+    text-align:center;
+    font-size:clamp(22px,5vw,28px);
+    color:var(--text-title);
+    margin-bottom:16px;
+    letter-spacing:1px;
+    transition: color 0.3s ease;
+}
+
+.top-substation-wrap{
+    margin-bottom:20px;
+    padding:16px 16px;
+}
+
+.substation-title{
+    font-size:clamp(16px,4vw,18px);
+    color:var(--text-title);
+    margin-bottom:12px;
+    transition: color 0.3s ease;
+}
+
+.substation-box{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.substation-item{
+    padding:10px 14px;
+    background:var(--linkitem-bg);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    border:1px solid var(--glass-border);
+    border-radius:12px;
+    transition: all 0.25s ease;
+}
+
+.substation-item:hover{
+    background:var(--linkitem-hover-bg);
+}
+
+.substation-a{
+    color:var(--text-color);
+    text-decoration:none;
+    font-weight:500;
+    font-size:14px;
+    transition: color 0.3s ease;
+}
+
+.substation-a:hover{
+    color:var(--hover-color);
+    text-decoration:underline;
+}
+
+.module-wrap{
+    padding:18px 16px;
+    margin-bottom:18px;
+}
+
+.module-title{
+    font-size:clamp(16px,4vw,18px);
+    color:var(--text-title);
+    margin-bottom:12px;
+    transition: color 0.3s ease;
+}
+
+.link-list-wrap{
+    display:flex;
+    gap:10px;
+    flex-wrap: wrap;
+    width:100%;
+}
+
+.link-item{
+    flex: 1 1 130px;
+    min-width: 110px;
+    max-width: 100%;
+    padding:12px 8px;
+    background:var(--linkitem-bg);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    border:1px solid var(--glass-border);
+    border-radius:14px;
+    transition: all 0.25s ease;
+    text-align:center;
+    display:block;
+    text-decoration:none;
+    color:var(--text-color);
+    overflow:hidden;
+}
+
+.link-item:hover{
+    background:var(--linkitem-hover-bg);
+    color:var(--hover-color);
+}
+
+.link-icon{
+    font-size:22px;
+    margin-bottom: 6px;
+}
+
+.link-text{
+    font-weight:500;
+    font-size:14px;
+    display:block;
+    word-break: break-word;
+}
+
+.footer-bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-color);
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border-top: 1px solid var(--glass-border);
+    z-index: 998;
+    transition: all 0.3s ease;
+}
+
+body.dark .footer-bar{
+    background: rgba(20,23,30,0.32);
+}
+
+body.custom-theme.text-light .footer-bar{
+    background:rgba(0,0,0,0.22);
+}
+
+body.custom-theme.text-dark .footer-bar{
+    background:rgba(255,255,255,0.22);
+}
+
+.about-float{
+    position: fixed;
+    right:12px;
+    bottom:75px;
+    z-index:997;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    max-width: calc(100% - 24px);
+}
+
+.about-btn{
+    padding:6px 10px;
+    font-size:13px;
+    background:rgba(255,255,255,0.22);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border:1px solid var(--glass-border);
+    border-radius:12px;
+    color:var(--text-color);
+    cursor:pointer;
+    transition: all 0.25s ease;
+    white-space:nowrap;
+}
+
+.about-btn:hover{
+    background:rgba(255,255,255,0.38);
+}
+
+/* 免责弹窗：无打开动画，只有关闭动画 */
+.modal-overlay.warn-modal{
+    position: fixed;
+    inset:0;
+    background: var(--modal-backdrop);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.modal-overlay.warn-modal.closing{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.modal-overlay.warn-modal .modal-box{
+    background: var(--modal-bg-light);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid var(--modal-border-light);
+    border-radius: 20px;
+    max-width: 480px;
+    width: 100%;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: scale(1);
+    opacity:1;
+    transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.modal-overlay.warn-modal.closing .modal-box{
+    transform: scale(0.94);
+    opacity:0;
+}
+
+/* 关于弹窗：打开和关闭都有动画 */
+.modal-overlay.normal-modal{
+    position: fixed;
+    inset:0;
+    background: var(--modal-backdrop);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.modal-overlay.normal-modal.active{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.modal-overlay.normal-modal .modal-box{
+    background: var(--modal-bg-light);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid var(--modal-border-light);
+    border-radius: 20px;
+    max-width: 480px;
+    width: 100%;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: scale(0.94);
+    opacity:0;
+    transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.modal-overlay.normal-modal.active .modal-box{
+    transform: scale(1);
+    opacity:1;
+}
+
+body.dark .modal-box,
+body.custom-theme.text-light .modal-box{
+    background: var(--modal-bg-dark);
+    border-color: var(--modal-border-dark);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.modal-title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:14px;
+    color:var(--text-title);
+    transition: color 0.3s ease;
+}
+
+.modal-content{
+    font-size:14px;
+    line-height:1.7;
+    color:var(--text-color);
+    margin-bottom:20px;
+    transition: color 0.3s ease;
+}
+
+.modal-close-btn{
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.24);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    color:var(--text-color);
+    cursor:pointer;
+    font-size:14px;
+    transition:all 0.25s ease;
+}
+
+.modal-close-btn:hover{
+    background:rgba(255,255,255,0.42);
+}
+
+@media (max-width:480px){
+    .theme-btn{
+        padding:5px 8px;
+        font-size:12px;
+    }
+    .about-btn{
+        padding:5px 8px;
+        font-size:12px;
+    }
+    .link-item{
+        padding:10px 6px;
+    }
+    .link-icon{
+        font-size:20px;
+    }
+    .link-text{
+        font-size:13px;
+    }
+    .module-wrap{
+        padding:14px 12px;
+    }
+    .top-substation-wrap{
+        padding:14px 12px;
+    }
+    .modal-box{
+        padding:18px;
+    }
+    .custom-theme-panel{
+        max-width:220px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="modalWrap" class="modal-overlay warn-modal">
+    <div class="modal-box">
+        <div class="modal-title">温馨提示</div>
+        <div class="modal-content">
+            <p>如遇滑动卡顿等性能问题，代表你该升级设备了。</p>
+            <p>点击右上角关闭液态玻璃可解决99%的卡顿</p>
+            <p>如遇链接失效等问题点击右下角关于反馈。</p>
+            <br>
+            <p><strong>免责声明：</strong></p>
+            <p>本站仅做链接聚合整理，所有外部跳转网站内容均由第三方提供，本站不对外部网站内容安全、有效性做任何担保。访问外部链接风险由使用者自行承担。</p>
+        </div>
+        <button class="modal-close-btn" id="closeModal">我已知晓</button>
+    </div>
+</div>
+
+<div id="aboutModalWrap" class="modal-overlay normal-modal">
+    <div class="modal-box">
+        <div class="modal-title">关于</div>
+        <div class="modal-content">
+            <p>液态玻璃资源站，第三方链接聚合导航站。</p>
+            <br>
+            <p><strong>B站主页：</strong><a href="https://space.bilibili.com/3546377808251039" target="_blank" style="color:var(--hover-color)">点击跳转</a></p>
+            <br>
+            <p><strong>问题反馈</strong></p>
+            <p>反馈邮箱：cqw_0320@outlook.com</p>
+        </div>
+        <button class="modal-close-btn" id="closeAboutModal">关闭</button>
+    </div>
+</div>
+
+<div class="top-btn-wrap">
+    <button class="theme-btn" id="liquidGlassToggleBtn">🔮液态玻璃:开启</button>
+    <button class="theme-btn" data-theme="pink">💖浅粉</button>
+    <button class="theme-btn" data-theme="blue">💙浅蓝</button>
+    <button class="theme-btn" data-theme="dark">🌓暗色</button>
+    <button class="theme-btn" id="toggleCustomPanel">🎨自定义</button>
+</div>
+
+<div class="custom-theme-panel" id="customPanel">
+    <div>
+        <div class="custom-section-title">4 层渐变</div>
+        <div class="color-row">
+            <div class="color-input-item">
+                <input type="color" id="cg1">
+                <span>渐变1</span>
+            </div>
+            <div class="color-input-item">
+                <input type="color" id="cg2">
+                <span>渐变2</span>
+            </div>
+            <div class="color-input-item">
+                <input type="color" id="cg3">
+                <span>渐变3</span>
+            </div>
+            <div class="color-input-item">
+                <input type="color" id="cg4">
+                <span>渐变4</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="custom-section-title">单色自定义</div>
+        <div class="color-row">
+            <div class="color-input-item">
+                <input type="color" id="singleColor">
+                <span>单色</span>
+            </div>
+        </div>
+        <div class="single-actions">
+            <button class="single-btn" id="applySingle">应用单色</button>
+            <button class="single-btn" id="exitSingle">退出单色</button>
+        </div>
+    </div>
+</div>
+
+<div class="about-float">
+    <button class="about-btn" id="openAbout">ℹ️关于</button>
+</div>
+
+<div class="container">
+    <h1 class="page-title">液态玻璃资源站</h1>
+
+    <div class="liquid-glass top-substation-wrap">
+        <div class="substation-title">🔗其他分站</div>
+        <div class="substation-box">
+            <div class="substation-item">
+                <a class="substation-a" href="https://meitibfq.pages.dev/" target="_blank">本地媒体播放器</a>
+            </div>
+            <div class="substation-item">
+                <a class="substation-a" href="https://htmlshengchen.pages.dev/" target="_blank">HTML生成站</a>
+            </div>
+            <div class="substation-item">
+                <a class="substation-a" href="https://tongdabzmn.pages.dev/" target="_blank">报站器模拟(有小问题)</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">🎵音乐听歌模块</div>
+        <div class="link-list-wrap" id="musicLinkBox"></div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">💬社交模块</div>
+        <div class="link-list-wrap" id="socialLinkBox"></div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">📱视频平台</div>
+        <div class="link-list-wrap" id="shortVideoLinkBox"></div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">🎮在线游戏模块</div>
+        <div class="link-list-wrap" id="gameLinkBox"></div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">🎮游戏资源模块</div>
+        <div class="link-list-wrap" id="gameResBox"></div>
+    </div>
+
+    <div class="liquid-glass module-wrap">
+        <div class="module-title">🛠️装机必备模块</div>
+        <div class="link-list-wrap" id="toolLinkBox"></div>
+    </div>
+</div>
+
+<div class="footer-bar">
+    <span>©</span>
+    <span>2026</span>
+    <span>液态玻璃资源站</span>
+</div>
+
+<script>
+const musicLinks = [
+    {title:"Mineradio", url:"https://mineradio.cn/", icon:"📻"},
+    {title:"24bit音乐网", url:"https://www.24bit.net/", icon:"🎧"},
+    {title:"酷狗音乐", url:"https://www.kugou.com/", icon:"🎶"},
+    {title:"酷我音乐", url:"https://www.kuwo.cn/", icon:"🎵"},
+    {title:"汽水音乐", url:"https://www.qishui.com/", icon:"🍹"},
+    {title:"TuneFreeNext", url:"https://cdn.sayqz.com/tunefreenext", icon:"🎼"},
+    {title:"QQMP3", url:"https://www.qqmp3.vip/", icon:"🎹"},
+    {title:"音乐魔石", url:"https://www.pfx9.top/", icon:"💿"},
+    {title:"KK无损音乐库", url:"https://www.kkws.cc/", icon:"🎛️"},
+    {title:"网易云音乐", url:"https://music.163.com", icon:"🎤"},
+    {title:"QQ音乐", url:"https://y.qq.com", icon:"🎸"},
+    {title:"Daott", url:"https://www.daott.cn/post/341.html", icon:"📀"},
+    {title:"糖果无损音乐网", url:"https://www.tgws.cc/", icon:"🍬"},
+    {title:"无忧音乐网", url:"https://www.wymp3.com/", icon:"☁️"},
+    {title:"5song", url:"https://www.5song.xyz/", icon:"🎞️"},
+    {title:"JGWAV", url:"https://www.jgwav.cc/", icon:"📻"},
+    {title:"歌曲宝", url:"https://www.gequbao.com/", icon:"🎶"},
+    {title:"歌曲客", url:"https://www.gequke.com/", icon:"🎙️"},
+    {title:"音乐坊", url:"https://yyfang.top/", icon:"🎛️"},
+    {title:"FLMP3", url:"https://www.flmp3.pro/", icon:"💽"},
+    {title:"6sing音乐网", url:"http://www.6sing.top/", icon:"🎤"},
+    {title:"JYWAV", url:"https://www.jywav.com/", icon:"📀"},
+    {title:"23APE", url:"http://www.23ape.net/", icon:"🎧"},
+    {title:"LivePoo", url:"https://shturl.cc/wfyk19fTd6bnZ", icon:"🎼"},
+    {title:"凤梨音乐", url:"https://www.fangpi.net/", icon:"🍍"},
+    {title:"歌曲海", url:"https://www.gequhai.com/", icon:"🌊"},
+    {title:"PPWAV", url:"https://www.ppwav.cc/", icon:"🎚️"},
+    {title:"音微", url:"https://www.yinwe.com/", icon:"🔊"},
+    {title:"XMwav", url:"https://xmwav.net/", icon:"📻"},
+    {title:"GDStudio", url:"https://music.gdstudio.org/", icon:"🎹"}
+];
+
+const socialLinks = [
+    {title:"微信", url:"https://weixin.qq.com/", icon:"💬"},
+    {title:"QQ", url:"https://im.qq.com/", icon:"🐧"},
+    {title:"钉钉", url:"https://www.dingtalk.com/", icon:"📎"},
+    {title:"企业微信", url:"https://work.weixin.qq.com/", icon:"🏢"},
+    {title:"微博", url:"https://weibo.com", icon:"📢"}
+];
+
+const shortVideoLinks = [
+    {title:"哔哩哔哩", url:"https://www.bilibili.com", icon:"📺"},
+    {title:"快手", url:"https://www.kuaishou.com/", icon:"⚡"},
+    {title:"抖音", url:"https://www.douyin.com/", icon:"🎵"},
+    {title:"小红书", url:"https://www.xiaohongshu.com/", icon:"📖"}
+];
+
+const gameLinks = [
+    {title:"‑better小游戏合集", url:"https://better6666.github.io/-better/", icon:"🕹️"},
+    {title:"4399小游戏", url:"https://www.4399.com/", icon:"🎮"},
+    {title:"CS1.6网页对战", url:"https://vpn.zongsang.com/", icon:"🔫"},
+    {title:"IOXAPP小游戏大全", url:"https://game.ioxapp.com/", icon:"🎮"},
+    {title:"YIKM小游戏集合", url:"https://www.yikm.net/", icon:"🎯"},
+    {title:"RA2WEB红警网页版", url:"https://game.ra2web.cn/", icon:"💥"},
+    {title:"Flappy Bird", url:"https://flappybird.io/", icon:"🐦"},
+    {title:"三国杀网页版", url:"https://web.sanguosha.com/login/x/index", icon:"🃏"},
+    {title:"Poki", url:"https://poki.com/", icon:"🎰"},
+    {title:"MCJS", url:"https://mcjs.link/", icon:"⛏️"},
+    {title:"Y8小游戏", url:"https://zh.y8.com/", icon:"🎲"},
+    {title:"EMU666模拟器站", url:"https://www.emu666.com/", icon:"👾"},
+    {title:"海勇游戏站", url:"https://game.haiyong.site/", icon:"🎖️"},
+    {title:"ClassicJoy", url:"https://classicjoy.games/", icon:"🎮"}
+];
+
+const gameResLinks = [
+    {title:"PCL2启动器", url:"https://pcl.ruanmao.net/", icon:"🧱"},
+    {title:"Steam商店", url:"https://store.steampowered.com/", icon:"🎮"},
+    {title:"网易游戏", url:"https://game.163.com/", icon:"🎯"},
+    {title:"三角洲行动", url:"https://df.qq.com/index.shtml", icon:"🔫"},
+    {title:"Epic游戏商城", url:"https://store.epicgames.com/", icon:"🎁"},
+    {title:"原神", url:"https://www.yuanshen.com/", icon:"✨"},
+    {title:"无畏契约", url:"https://val.qq.com/", icon:"🔫"},
+    {title:"永劫无间", url:"https://www.yjwujian.cn/", icon:"⚔️"}
+];
+
+const toolLinks = [
+    {title:"7‑Zip", url:"https://www.7‑zip.org/", icon:"📦"},
+    {title:"火绒安全软件", url:"https://www.huorong.cn/", icon:"🛡️"},
+    {title:"WPS Office", url:"https://www.wps.cn/", icon:"📄"},
+    {title:"微信输入法", url:"https://wetype.weixin.qq.com/", icon:"⌨️"},
+    {title:"Everything", url:"https://www.voidtools.com/zh‑cn/", icon:"🔍"},
+    {title:"鼠标在线测试", url:"https://www.mousetester.cn/", icon:"🖱️"},
+    {title:"键盘在线测试", url:"https://www.zfrontier.com/lab/keyboardTester", icon:"⌨️"},
+    {title:"中科大网络测速", url:"https://test.ustc.edu.cn/", icon:"📶"},
+    {title:"FlyingMouse Format", url:"https://github.com/LaoFeng‑mouse/flyingmouse‑format/releases", icon:"🔧"},
+    {title:"OBS Studio", url:"https://obsproject.com/zh‑cn", icon:"🎥"}
+];
+
+const themePreset = {
+    pink: {g1:"#ffeaf2",g2:"#fce4ee",g3:"#f8dce8",g4:"#fbe5ee"},
+    blue:{g1:"#e8f2ff",g2:"#ddecfb",g3:"#d1e4f8",g4:"#e4effc"},
+    dark:{g1:"#14161b",g2:"#1a1d24",g3:"#22252d",g4:"#17191f"}
+};
+
+const domCache = {
+    musicBox: document.querySelector("#musicLinkBox"),
+    socialBox: document.querySelector("#socialLinkBox"),
+    shortVideoBox: document.querySelector("#shortVideoLinkBox"),
+    gameBox: document.querySelector("#gameLinkBox"),
+    gameResBox: document.querySelector("#gameResBox"),
+    toolBox: document.querySelector("#toolLinkBox"),
+    btnWrap: document.querySelector(".top-btn-wrap"),
+    body: document.body,
+    modalWrap: document.querySelector("#modalWrap"),
+    closeModalBtn: document.querySelector("#closeModal"),
+    openAboutBtn: document.querySelector("#openAbout"),
+    aboutModal: document.querySelector("#aboutModalWrap"),
+    closeAboutBtn: document.querySelector("#closeAboutModal"),
+    toggleCustomPanelBtn: document.querySelector("#toggleCustomPanel"),
+    customPanel: document.querySelector("#customPanel"),
+    cg1: document.querySelector("#cg1"),
+    cg2: document.querySelector("#cg2"),
+    cg3: document.querySelector("#cg3"),
+    cg4: document.querySelector("#cg4"),
+    singleColor: document.querySelector("#singleColor"),
+    applySingle: document.querySelector("#applySingle"),
+    exitSingle: document.querySelector("#exitSingle"),
+    liquidGlassToggleBtn: document.querySelector("#liquidGlassToggleBtn")
+};
+
+function setLiquidGlass(enable){
+    if(enable){
+        domCache.body.classList.remove("liquid-glass-off");
+        domCache.liquidGlassToggleBtn.innerText = "🔮液态玻璃:开启";
+    }else{
+        domCache.body.classList.add("liquid-glass-off");
+        domCache.liquidGlassToggleBtn.innerText = "🔮液态玻璃:关闭";
+    }
+    localStorage.setItem("liquid_glass_enable", String(enable));
+}
+
+domCache.liquidGlassToggleBtn.addEventListener("click",()=>{
+    const current = !domCache.body.classList.contains("liquid-glass-off");
+    setLiquidGlass(!current);
+});
+
+function hexToRgb(hex) {
+    const h = hex.replace('#','');
+    const r = parseInt(h.substring(0,2),16);
+    const g = parseInt(h.substring(2,4),16);
+    const b = parseInt(h.substring(4,6),16);
+    return {r,g,b};
+}
+
+function getLuminance(hexColor){
+    const {r,g,b}=hexToRgb(hexColor);
+    return (0.299*r + 0.587*g + 0.114*b)/255;
+}
+
+function setCustomTextAuto(bgHex){
+    domCache.body.classList.remove("text-dark","text-light");
+    const lum=getLuminance(bgHex);
+    if(lum>0.52){
+        domCache.body.classList.add("text-dark");
+    }else{
+        domCache.body.classList.add("text-light");
+    }
+}
+
+function applyTheme(themeName){
+    domCache.body.classList.remove("blue-theme","dark","custom-theme","text-dark","text-light");
+    domCache.body.removeAttribute("use-single");
+    const p = themePreset[themeName];
+    document.documentElement.style.setProperty("--bg-gradient-1",p.g1);
+    document.documentElement.style.setProperty("--bg-gradient-2",p.g2);
+    document.documentElement.style.setProperty("--bg-gradient-3",p.g3);
+    document.documentElement.style.setProperty("--bg-gradient-4",p.g4);
+
+    domCache.cg1.value = p.g1;
+    domCache.cg2.value = p.g2;
+    domCache.cg3.value = p.g3;
+    domCache.cg4.value = p.g4;
+
+    if(themeName === "blue") domCache.body.classList.add("blue-theme");
+    if(themeName === "dark") domCache.body.classList.add("dark");
+
+    localStorage.setItem("site_theme", themeName);
+    localStorage.removeItem("customGradients");
+    localStorage.removeItem("customSingle");
+}
+
+function applyCustomGradient(g1,g2,g3,g4){
+    domCache.body.classList.remove("blue-theme","dark");
+    domCache.body.classList.add("custom-theme");
+    domCache.body.removeAttribute("use-single");
+
+    document.documentElement.style.setProperty("--bg-gradient-1",g1);
+    document.documentElement.style.setProperty("--bg-gradient-2",g2);
+    document.documentElement.style.setProperty("--bg-gradient-3",g3);
+    document.documentElement.style.setProperty("--bg-gradient-4",g4);
+    setCustomTextAuto(g1);
+
+    localStorage.setItem("site_theme","custom");
+    localStorage.setItem("customGradients",JSON.stringify([g1,g2,g3,g4]));
+    localStorage.removeItem("customSingle");
+}
+
+function applyCustomSingle(color){
+    domCache.body.classList.remove("blue-theme","dark");
+    domCache.body.classList.add("custom-theme");
+    domCache.body.removeAttribute("use-single");
+    domCache.body.setAttribute("use-single","1");
+    document.documentElement.style.setProperty("--bg-single",color);
+    setCustomTextAuto(color);
+
+    localStorage.setItem("site_theme","custom");
+    localStorage.setItem("customSingle",color);
+    localStorage.removeItem("customGradients");
+}
+
+function loadSavedTheme(){
+    const saved = localStorage.getItem("site_theme");
+    const customGrad = localStorage.getItem("customGradients");
+    const customSingle = localStorage.getItem("customSingle");
+    const glassState = localStorage.getItem("liquid_glass_enable");
+
+    if(glassState === "false"){
+        setLiquidGlass(false);
+    }else{
+        setLiquidGlass(true);
+    }
+
+    if(saved === "custom"){
+        if(customSingle){
+            domCache.singleColor.value = customSingle;
+            applyCustomSingle(customSingle);
+        }else if(customGrad){
+            const arr = JSON.parse(customGrad);
+            domCache.cg1.value = arr[0];
+            domCache.cg2.value = arr[1];
+            domCache.cg3.value = arr[2];
+            domCache.cg4.value = arr[3];
+            applyCustomGradient(arr[0],arr[1],arr[2],arr[3]);
+        }
+    }else if(saved && themePreset[saved]){
+        applyTheme(saved);
+    }else{
+        applyTheme("pink");
+    }
+}
+
+function renderLinks(list, container){
+    const frag = document.createDocumentFragment();
+    for(let i = 0; i < list.length; i++){
+        const item = list[i];
+        const a = document.createElement("a");
+        a.className = "link-item";
+        a.href = item.url;
+        a.target = "_blank";
+        a.innerHTML = `<div class="link-icon">${item.icon}</div><span class="link-text">${item.title}</span>`;
+        frag.appendChild(a);
+    }
+    container.textContent = "";
+    container.appendChild(frag);
+}
+
+function renderAll(){
+    renderLinks(musicLinks, domCache.musicBox);
+    renderLinks(socialLinks, domCache.socialBox);
+    renderLinks(shortVideoLinks, domCache.shortVideoBox);
+    renderLinks(gameLinks, domCache.gameBox);
+    renderLinks(gameResLinks, domCache.gameResBox);
+    renderLinks(toolLinks, domCache.toolBox);
+}
+
+domCache.btnWrap.addEventListener("click", function(e){
+    const btn = e.target.closest("[data-theme]");
+    if(!btn) return;
+    const t = btn.dataset.theme;
+    applyTheme(t);
+});
+
+domCache.toggleCustomPanelBtn.addEventListener("click",()=>{
+    domCache.customPanel.classList.toggle("show");
+});
+
+[domCache.cg1,domCache.cg2,domCache.cg3,domCache.cg4].forEach(input=>{
+    input.addEventListener("input",()=>{
+        applyCustomGradient(
+            domCache.cg1.value,
+            domCache.cg2.value,
+            domCache.cg3.value,
+            domCache.cg4.value
+        );
+    });
+});
+
+domCache.applySingle.addEventListener("click",()=>{
+    applyCustomSingle(domCache.singleColor.value);
+});
+
+domCache.exitSingle.addEventListener("click",()=>{
+    const customGrad = localStorage.getItem("customGradients");
+    if(customGrad){
+        const arr = JSON.parse(customGrad);
+        applyCustomGradient(arr[0],arr[1],arr[2],arr[3]);
+    }else{
+        applyTheme("pink");
+    }
+});
+
+// 免责弹窗：只有关闭动画
+domCache.closeModalBtn.addEventListener("click",()=>{
+    domCache.modalWrap.classList.add("closing");
+});
+
+// 关于弹窗：打开动画
+domCache.openAboutBtn.addEventListener("click",()=>{
+    domCache.aboutModal.classList.add("active");
+});
+
+// 关于弹窗：关闭动画
+domCache.closeAboutBtn.addEventListener("click",()=>{
+    domCache.aboutModal.classList.remove("active");
+});
+
+loadSavedTheme();
+renderAll();
+</script>
+
+</body>
+</html>
